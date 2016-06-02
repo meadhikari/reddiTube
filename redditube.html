@@ -1,0 +1,147 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+    rel="stylesheet" type="text/css">
+    <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css"
+    rel="stylesheet" type="text/css">
+  </head>
+  
+  <body>
+    <div class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><span>ReddiTube</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="#" id="https://www.reddit.com/r/videos.json">Hot</a>
+            </li>
+            <li>
+              <a href="#" id="https://www.reddit.com/r/videos/rising.json">Rising</a>
+            </li>
+            <li>
+              <a href="#" id="https://www.reddit.com/r/videos/top.json">Top</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row" id="main">
+        	
+        </div>
+      </div>
+    </div>
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="videoTitle">YouTube Video</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe id="modalVideo" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+<script type="text/javascript">
+	String.prototype.format = String.prototype.f = function() {
+	    var s = this,
+	        i = arguments.length;
+
+	    while (i--) {
+	        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
+	    }
+	    return s;
+	};
+	String.prototype.trunc = String.prototype.trunc ||
+      function(n){
+          return (this.length > n) ? this.substr(0,n-1)+'&hellip;' : this;
+    };
+</script>
+<script type="text/javascript">
+	$( document ).ready(function() {
+		dotAnimation()
+		loadPage("https://www.reddit.com/r/videos.json")
+		
+	});
+
+	$('body').on('click','img',function(){
+		youtube_url = "https://www.youtube.com/embed/"+$(this).attr('id')+"?autoplay=1"
+		title= $(this).next().attr('name')
+		$('#videoTitle').html(title)
+		$('#modalVideo').attr('src',youtube_url)
+		$('#myModal').modal('show');
+	})
+	$('#myModal').on('hidden.bs.modal', function () {
+  		$('#modalVideo').attr('src','')
+	})
+
+	$('body').on('click','a',function(){
+		$('.navbar-nav li.active').removeClass('active');
+    	$(this).parent().addClass('active');
+		dotAnimation()
+		loadPage($(this).attr('id'))
+	})
+
+function dotAnimation()
+{
+	$('#main').html('<div id="loading"><h2>Loading</h2></div>')
+	//this feels stupid
+	var originalText = $("h2").text(),
+	i  = 0;
+	setInterval(function() 
+	{
+
+	    $("h2").append(".");
+	    i++;
+	    
+	    if(i == 4)
+	    {
+	        $("h2").html(originalText);
+	        i = 0;
+	    }
+
+	}, 500);
+}
+function loadPage(reddit_url)
+{
+	$.get( reddit_url, function( data ) {
+    		var youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
+  			_.each(youtube_videos, function(video) {
+  				$('#loading').remove()
+  				title = video['data']['title']
+  				score = video['data']['score']
+  				title_trunc = video['data']['title'].trunc(50)
+  				url = video['data']['url']
+  				id = url.replace("https://www.youtube.com/watch?v=","")
+  				thumbnail = "http://img.youtube.com/vi/{0}/0.jpg".format(id)
+  				permalink = "http://reddit.com"+video['data']['permalink']
+  				url = url.replace("watch?v=","/embed/");
+  				$( '<div class="col-md-4">\
+            			<image width="360" height="270" src="{1}" class="img-responsive" id={2} title="{5}">\
+            			<a href={4} target="_blank" <h5 name="{3}">{0}</h5></a>\
+          			</div>'.format(title_trunc,thumbnail,id,title,permalink,"Score: "+score)
+          		).appendTo( "#main" );
+
+  			});	
+		});
+}	
+</script>
+</html>
