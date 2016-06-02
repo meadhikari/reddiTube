@@ -122,9 +122,10 @@ function dotAnimation()
 }
 function loadPage(reddit_url)
 {
-	console.log(reddit_url)
   $.get( reddit_url, function( data ) {
-    		youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
+    		  console.log(reddit_url)
+
+        youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
   			_.each(youtube_videos, function(video) {
   				$('#loading').remove()
   				title = video['data']['title']
