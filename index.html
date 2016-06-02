@@ -124,10 +124,11 @@ function dotAnimation()
 function loadPage(reddit_url)
 {
 	$.get( reddit_url, function( data ) {
-    		var youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
+    		youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
   			_.each(youtube_videos, function(video) {
   				$('#loading').remove()
   				title = video['data']['title']
+          console/log(title)
   				score = video['data']['score']
   				title_trunc = video['data']['title'].trunc(50)
   				url = video['data']['url']
@@ -136,8 +137,8 @@ function loadPage(reddit_url)
           if(ampersandPosition != -1) {
             id = id.substring(0, ampersandPosition);
           }
-  				thumbnail = "http://img.youtube.com/vi/{0}/0.jpg".format(id)
-  				permalink = "http://reddit.com"+video['data']['permalink']
+  				thumbnail = "https://img.youtube.com/vi/{0}/0.jpg".format(id)
+  				permalink = "https://reddit.com"+video['data']['permalink']
   				url = url.replace("watch?v=","/embed/");
   				$( '<div class="col-md-4">\
             			<image width="360" height="270" src="{1}" class="img-responsive" id={2} title="{5}">\
