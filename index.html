@@ -97,6 +97,7 @@
 		$('.navbar-nav li.active').removeClass('active');
     		$(this).parent().addClass('active');
 		dotAnimation()
+    console.log($(this))
 		loadPage($(this).attr('id'))
 	})
 
@@ -136,7 +137,6 @@ function loadPage(reddit_url)
             id = id.substring(0, ampersandPosition);
           }
   				thumbnail = "http://img.youtube.com/vi/{0}/0.jpg".format(id)
-          console.log(thumbnail)
   				permalink = "http://reddit.com"+video['data']['permalink']
   				url = url.replace("watch?v=","/embed/");
   				$( '<div class="col-md-4">\
