@@ -22,18 +22,18 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#" id="ttps://www.reddit.com/r/videos/top.json"><span>ReddiTube</span></a>
+          <a class="navbar-brand" href="#" id="https://www.reddit.com/r/videos.json"><span>ReddiTube</span></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class="active">
-              <a href="#" id="ttps://www.reddit.com/r/videos/top.json">Hot</a>
+              <a href="#" id="https://www.reddit.com/r/videos.json">Hot</a>
             </li>
             <li>
-              <a href="#" id="ttps://www.reddit.com/r/videos/top.json">Rising</a>
+              <a href="#" id="https://www.reddit.com/r/videos/rising.json">Rising</a>
             </li>
             <li>
-              <a href="#" id="https://www.reddit.com/r/videos/top.json">Top</a>
+              <a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=all">Top</a>
             </li>
           </ul>
         </div>
@@ -78,7 +78,7 @@
 <script type="text/javascript">
 	$( document ).ready(function() {
 		dotAnimation()
-		loadPage("https://www.reddit.com/r/videos/top.json")
+		loadPage("https://www.reddit.com/r/videos.json")
 		
 	});
 
@@ -97,6 +97,7 @@
 		$('.navbar-nav li.active').removeClass('active');
     $(this).parent().addClass('active');
 		dotAnimation()
+    console.log($(this))
 		loadPage($(this).attr('id'))
 	})
 
@@ -122,10 +123,9 @@ function dotAnimation()
 }
 function loadPage(reddit_url)
 {
+	
   $.get( reddit_url, function( data ) {
-    		  console.log(reddit_url)
-
-        youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
+    		youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
   			_.each(youtube_videos, function(video) {
   				$('#loading').remove()
   				title = video['data']['title']
