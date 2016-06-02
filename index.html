@@ -130,8 +130,13 @@ function loadPage(reddit_url)
   				score = video['data']['score']
   				title_trunc = video['data']['title'].trunc(50)
   				url = video['data']['url']
-  				id = url.replace("https://www.youtube.com/watch?v=","")
+  				id = url.split('v=')[1];
+          var ampersandPosition = id.indexOf('&');
+          if(ampersandPosition != -1) {
+            id = id.substring(0, ampersandPosition);
+          }
   				thumbnail = "http://img.youtube.com/vi/{0}/0.jpg".format(id)
+          console.log(thumbnail)
   				permalink = "http://reddit.com"+video['data']['permalink']
   				url = url.replace("watch?v=","/embed/");
   				$( '<div class="col-md-4">\
