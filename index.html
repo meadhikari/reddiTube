@@ -121,12 +121,17 @@
       loadPage()  
     }
     else if ($(this).attr('id') == 'next') {
-        console.log("clicked")
         loadPage()
 
     }
 		
 	})
+
+  $(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        loadPage()
+  }
+  });
 
 function dotAnimation()
 {
