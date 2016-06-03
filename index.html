@@ -94,11 +94,14 @@
 	})
 
 	$('body').on('click','a',function(){
-		$('.navbar-nav li.active').removeClass('active');
-    $(this).parent().addClass('active');
-		dotAnimation()
-    console.log($(this))
-		loadPage($(this).attr('id'))
+    if ($(this).parent().is( "li" ))
+    {
+      $('.navbar-nav li.active').removeClass('active');
+      $(this).parent().addClass('active');
+      dotAnimation()
+      loadPage($(this).attr('id'))  
+    }
+		
 	})
 
 function dotAnimation()
@@ -129,7 +132,6 @@ function loadPage(reddit_url)
   			_.each(youtube_videos, function(video) {
   				$('#loading').remove()
   				title = video['data']['title']
-          console.log(title)
   				score = video['data']['score']
   				title_trunc = video['data']['title'].trunc(50)
   				url = video['data']['url']
