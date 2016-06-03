@@ -27,18 +27,18 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#" id="https://www.reddit.com/r/videos.json"><span>ReddiTube</span></a>
+          <a class="navbar-brand" href="#" id="https://www.reddit.com/r/videos.json&after="><span>ReddiTube</span></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class="active">
-              <a href="#" id="https://www.reddit.com/r/videos.json">Hot</a>
+              <a href="#" id="https://www.reddit.com/r/videos.json?after=">Hot</a>
             </li>
             <li>
-              <a href="#" id="https://www.reddit.com/r/videos/rising.json">Rising</a>
+              <a href="#" id="https://www.reddit.com/r/videos/rising.json?after=">Rising</a>
             </li>
             <li>
-              <a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=all">Top</a>
+              <a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=all&after=">Top</a>
             </li>
           </ul>
         </div>
@@ -48,6 +48,15 @@
       <div class="container">
         <div class="row" id="main">
         	
+        </div>
+      </div>
+    </div>
+    <div class="section" id="nextPageIcon" style="display:none;">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <a href="javascript:void(0);" class="pull-right" id="next"><i class="fa fa-3x fa-fw fa-arrow-circle-down"></i></a>
+          </div>
         </div>
       </div>
     </div>
@@ -81,9 +90,12 @@
     };
 </script>
 <script type="text/javascript">
+  var reddit_url = ''
+  var after_code = ''
 	$( document ).ready(function() {
 		dotAnimation()
-		loadPage("https://www.reddit.com/r/videos.json")
+    reddit_url = "https://www.reddit.com/r/videos.json?after=" 
+		loadPage()
 		
 	});
 
@@ -104,7 +116,14 @@
       $('.navbar-nav li.active').removeClass('active');
       $(this).parent().addClass('active');
       dotAnimation()
-      loadPage($(this).attr('id'))  
+      reddit_url = $(this).attr('id')
+      after_code = '' 
+      loadPage()  
+    }
+    else if ($(this).attr('id') == 'next') {
+        console.log("clicked")
+        loadPage()
+
     }
 		
 	})
@@ -129,13 +148,15 @@ function dotAnimation()
 
 	}, 500);
 }
-function loadPage(reddit_url)
+function loadPage()
 {
 	
-  $.get( reddit_url, function( data ) {
+  $.get( reddit_url+after_code, function( data ) {
+        after_code= data['data']['after']
     		youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
   			_.each(youtube_videos, function(video) {
   				$('#loading').remove()
+          $('#nextPageIcon').css("display", "block");
   				title = video['data']['title']
   				score = video['data']['score']
   				title_trunc = video['data']['title'].trunc(50)
