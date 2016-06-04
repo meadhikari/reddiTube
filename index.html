@@ -7,20 +7,12 @@
     <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.js"></script>
+
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.css">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
-    <style type="text/css">
-    .fancybox-nav {
-    width: 60px;       
-    }
-
-    .fancybox-nav span {
-        visibility: visible;
-    }
-  </style>
-  </head>
-  
+    <link rel="stylesheet" type="text/css" href="css/main.css">    
+  </head>  
   <body>
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
@@ -65,93 +57,12 @@
       </div>
     </div>
   </body>
-  <script type="text/javascript">
-  var reddit_url = ''
-  var after_code = ''
-  // Fires whenever a player has finished loading
-function onPlayerReady(event) {
-    event.target.playVideo();
-}
-
-// Fires when the player's state changes.
-function onPlayerStateChange(event) {
-    // Go to the next video after the current one is finished playing
-    if (event.data === 0) {
-        $.fancybox.next();
-    }
-}
-
-// The API will call this function when the page has finished downloading the JavaScript for the player API
-function onYouTubePlayerAPIReady() {
-    
-    // Initialise the fancyBox after the DOM is loaded
-    $(document).ready(function() {
-        dotAnimation()
-        reddit_url = "https://www.reddit.com/r/videos.json?after=" 
-        loadPage()
-        $(".fancybox")
-            .attr('rel', 'gallery')
-            .fancybox({
-                openEffect  : 'none',
-                closeEffect : 'none',
-                nextEffect  : 'none',
-                prevEffect  : 'none',
-                padding     : 0,
-                margin      : 50,
-                beforeShow  : function() {
-                    // Find the iframe ID
-                    var id = $.fancybox.inner.find('iframe').attr('id');
-                    // Create video player object and add event listeners
-                    var player = new YT.Player(id, {
-                        events: {
-                            'onReady': onPlayerReady,
-                            'onStateChange': onPlayerStateChange
-                        }
-                    });
-                }
-            });
-    });
-    
-}
-</script>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/strings.js"></script>
+<script type="text/javascript" src="js/events.js"></script>
+<script type="text/javascript" src="js/youtube_player.js"></script>
 <script type="text/javascript">
-  String.prototype.format = String.prototype.f = function() {
-      var s = this,
-          i = arguments.length;
-
-      while (i--) {
-          s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
-      }
-      return s;
-  };
-  String.prototype.trunc = String.prototype.trunc ||
-      function(n){
-          return (this.length > n) ? this.substr(0,n-1)+'&hellip;' : this;
-    };
-</script>
-<script type="text/javascript">
-  $('body').on('click','a',function(){
-    if ($(this).parent().is( "li" ))
-    {
-      $('.navbar-nav li.active').removeClass('active');
-      $(this).parent().addClass('active');
-      dotAnimation()
-      reddit_url = $(this).attr('id')
-      after_code = '' 
-      loadPage()  
-    }
-    else if ($(this).attr('id') == 'next') {
-        loadPage()
-
-    }
-    
-  })
-
-  $(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() == $(document).height()) {
-        loadPage()
-  }
-  });
+  
 
 function dotAnimation()
 {
@@ -175,9 +86,8 @@ function dotAnimation()
 }
 function loadPage()
 {
-  
-  $.get( reddit_url+after_code, function( data ) {
-        after_code= data['data']['after']
+  $.get( REDDITUBE.reddit_url+REDDITUBE.after_code, function( data ) {
+        REDDITUBE.after_code= data['data']['after']
         youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
         _.each(youtube_videos, function(video) {
           $('#loading').remove()
