@@ -17,7 +17,7 @@ function onYouTubePlayerAPIReady() {
     // Initialise the fancyBox after the DOM is loaded
     $(document).ready(function() {
         dotAnimation()
-        reddit_url = "https://www.reddit.com/r/videos.json?after=" 
+        REDDITUBE.reddit_url = "https://www.reddit.com/r/videos.json?after=" 
         loadPage()
         $(".fancybox")
             .attr('rel', 'gallery')
