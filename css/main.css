@@ -4,3 +4,7 @@
 .fancybox-nav span {
    visibility: visible;
 }
+.logo {
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
