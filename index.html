@@ -27,7 +27,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#" id="https://www.reddit.com/r/videos.json&after="><span><img class="logo" src="http://byterevel.com/wp-content/uploads/2014/07/alientube-logo.jpg" height="30" width="30">ReddiTube</span></a>
+          <a class="navbar-brand" href="#" id="https://www.reddit.com/r/videos.json&after="><span><img class="" src="http://byterevel.com/wp-content/uploads/2014/07/alientube-logo.jpg" height="30" width="30">ReddiTube</span></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -37,9 +37,17 @@
             <li>
               <a href="#" id="https://www.reddit.com/r/videos/rising.json?after=">Rising</a>
             </li>
-            <li>
-              <a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=all&after=">Top</a>
-            </li>
+            <li class="dropdown">
+                <a href="https://www.reddit.com/r/videos/top.json?sort=top&t=all&after=" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Top<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=all&after=">all time</a></li>
+                  <li><a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=hour&after=">past hour</a></li>
+                  <li><a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=day&after=">past 24 hours</a></li>
+                  <li><a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=week&after=">past week</a></li>
+                  <li><a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=month&after=">past month</a></li>
+                  <li><a href="#" id="https://www.reddit.com/r/videos/top.json?sort=top&t=year&after=">past year</a></li>
+                </ul>
+              </li>
           </ul>
         </div>
       </div>
@@ -69,6 +77,11 @@
 </script>
 <script type="text/javascript" src="js/animation"></script>
 <script type="text/javascript">
+$('ul.nav li.dropdown').hover(function() {
+  $(this).find('.dropdown-menu').stop(true, true).delay(100).fadeIn(250);
+}, function() {
+  $(this).find('.dropdown-menu').stop(true, true).delay(100).fadeOut(250);
+});
 function loadPage()
 {
   
