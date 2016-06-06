@@ -1,6 +1,5 @@
 function dotAnimation()
 {
-  console.log("Came here")
   $('#main').html('<div id="loading"><h2>Loading</h2></div>')
   //this feels stupid
   var originalText = $("h2").text(),

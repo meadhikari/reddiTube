@@ -6,6 +6,7 @@
     <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
     <script src="js/strings.js"></script>
     <script type="text/javascript" src="js/global.js"></script>
     <script type="text/javascript" src="js/youtube_player.js"></script>
@@ -75,7 +76,7 @@
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 </script>
-<script type="text/javascript" src="js/animation"></script>
+<script type="text/javascript" src="js/animation.js"></script>
 <script type="text/javascript">
 $('ul.nav li.dropdown').hover(function() {
   $(this).find('.dropdown-menu').stop(true, true).delay(100).fadeIn(250);
@@ -84,36 +85,54 @@ $('ul.nav li.dropdown').hover(function() {
 });
 function loadPage()
 {
-  
-  $.get( REDDITUBE.reddit_url+REDDITUBE.after_code, function( data ) {
-        REDDITUBE.after_code= data['data']['after']
-        youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
-        _.each(youtube_videos, function(video) {
-          $('#loading').remove()
-          $('#nextPageIcon').css("display", "block");
-          title = video['data']['title']
-          score = video['data']['score']
-          title_trunc = video['data']['title'].trunc(50)
-          url = video['data']['url']
-          id = url.split('v=')[1];
-          var ampersandPosition = id.indexOf('&');
-          if(ampersandPosition != -1) {
-            id = id.substring(0, ampersandPosition);
-          }
-          youtube_url = "http://www.youtube.com/embed/"+id+"?enablejsapi=1&wmode=opaque"
-          thumbnail = "https://img.youtube.com/vi/{0}/0.jpg".format(id)
-          permalink = "https://reddit.com"+video['data']['permalink']
-          url = url.replace("watch?v=","/embed/");
-          $( '<div class="col-md-4">\
-                  <a href={4} target="_blank" <h5 name="{3}">{0}</h5></a>\
-                  <a class="fancybox fancybox.iframe" href="{6}" rel="videos"><image width="360" height="270" src="{1}" class="img-responsive" id={2} title="{5}"></a>\
-                </div>'.format(title_trunc,thumbnail,id,title,permalink,"Score: "+score,youtube_url)
-              ).appendTo( "#main" );
-
-        }); 
-    });
-} 
+  getData()
+}
+function getData()
+{
+  $.get( REDDITUBE.reddit_url+REDDITUBE.after_code,processData)       
+}
+function processData(data)
+{
+  REDDITUBE.after_code= data['data']['after']
+  $('#loading').remove()
+  $('#nextPageIcon').css("display", "block");    
+  youtube_videos = _.filter(data['data']['children'], function(video){ return video['data']['domain'] == 'youtube.com'; });
+  data = _.map(youtube_videos, function(videos)
+  { 
+    video = {}
+    video['title'] = videos['data']['title']
+    video['score'] = videos['data']['score']
+    video['title_short'] = videos['data']['title'].trunc(50)
+    url = videos['data']['url']
+    video['video_id']= url.split('v=')[1];
+    var ampersandPosition = video['video_id'].indexOf('&');
+    if(ampersandPosition != -1) {
+      video['video_id'] = video['video_id'].substring(0, ampersandPosition);
+    }
+    video['video_url'] = "http://www.youtube.com/embed/"+video['video_id']+"?enablejsapi=1&wmode=opaque"
+    video['thumbnail'] = "https://img.youtube.com/vi/{0}/0.jpg".format(video['video_id'])
+    video['permalink'] = "https://reddit.com"+videos['data']['permalink']
+    return video
+  });
+  addToPage("#main",data)
+}
+function addToPage(div,objects)
+{
+  _.each(objects, function(video) {
+    var source   = $("#video_item").html();
+    var template = Handlebars.compile(source);
+    var html    = template(video);
+    $(html).appendTo( div );
+  });
+}  
 </script>
 <script type="text/javascript" src="js/events.js"></script>
-
+<script id="video_item" type="text/x-handlebars-template">
+  <div class="col-md-4">
+    <a href={{permalink}} target="_blank">{{title_short}}</a>
+    <a class="fancybox fancybox.iframe" href="{{video_url}}" rel="videos">
+      <image width="360" height="270" src="{{thumbnail}}" class="img-responsive" id={{video_id}} title="Score: {{score}}"/>
+    </a>
+  </div>
+</script>
 </html>

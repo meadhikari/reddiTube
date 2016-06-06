@@ -9,5 +9,5 @@ String.prototype.format = String.prototype.f = function() {
 };
 String.prototype.trunc = String.prototype.trunc ||
     function(n){
-        return (this.length > n) ? this.substr(0,n-1)+'&hellip;' : this;
+        return (this.length > n) ? this.substr(0,n-1)+'...' : this;
 };
