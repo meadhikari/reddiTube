@@ -29,7 +29,7 @@ function onYouTubePlayerAPIReady() {
         video_id = window.location.hash.substr(1).split('v=')[1]
         if (video_id)
         {
-            anchor = '<a class="fancybox fancybox.iframe" href="http://www.youtube.com/embed/{0}?enablejsapi=1&wmode=opaque" rel="videos" style="display:nonw;" id="top" name={1}>'.format(video_id)
+            anchor = '<a class="fancybox fancybox.iframe" href="http://www.youtube.com/embed/{0}?enablejsapi=1&wmode=opaque" rel="gallery" style="display:nonw;" id="top" name={1}>'.format(video_id)
             $(anchor).appendTo( 'body' );
             $(window).load(function(){
                 $('#top').trigger('click'); 

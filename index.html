@@ -14,7 +14,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.css">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">  
-    <link href="css/main.css" rel="stylesheet" type="text/css">   
+    <link href="css/main.css" rel="stylesheet" type="text/css">
+
+    <title>ReddiTube: Best of Youtube from Youtube</title>   
  
   </head>
   
@@ -112,6 +114,7 @@ function processData(data)
     video['video_url'] = "http://www.youtube.com/embed/"+video['video_id']+"?enablejsapi=1&wmode=opaque"
     video['thumbnail'] = "https://img.youtube.com/vi/{0}/0.jpg".format(video['video_id'])
     video['permalink'] = "https://reddit.com"+videos['data']['permalink']
+    video['share_link'] = "http://redditube.tk/#v="+video['video_id']
     return video
   });
   addToPage("#main",data)
@@ -130,7 +133,11 @@ function addToPage(div,objects)
 <script id="video_item" type="text/x-handlebars-template">
   <div class="col-md-4">
     <a href={{permalink}} target="_blank">{{title_short}}</a>
-    <a class="fancybox fancybox.iframe" href="{{video_url}}" rel="videos">
+    <a class="fancybox fancybox.iframe" href="{{video_url}}" rel="videos" title="
+      <a href='{{permalink}}' target='_blank'>
+      {{title}}
+      </a>
+      ">
       <image width="360" height="270" src="{{thumbnail}}" class="img-responsive" id={{video_id}} title="Score: {{score}}"/>
     </a>
   </div>
