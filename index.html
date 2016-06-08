@@ -85,6 +85,15 @@ $('ul.nav li.dropdown').hover(function() {
 }, function() {
   $(this).find('.dropdown-menu').stop(true, true).delay(100).fadeOut(250);
 });
+var isActive;
+
+window.onfocus = function () { 
+  isActive = true; 
+}; 
+
+window.onblur = function () { 
+  isActive = false; 
+}; 
 function loadPage()
 {
   getData()

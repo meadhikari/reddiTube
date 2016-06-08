@@ -8,9 +8,26 @@ function onPlayerReady(event) {
 // Fires when the player's state changes.
 function onPlayerStateChange(event) {
     // Go to the next video after the current one is finished playing
+    var counter = 6 ;
     if (event.data === 0) {
-        $.fancybox.next();
+      setInterval(function() {
+        counter--;
+        if (counter >= 0) {
+          $('body > div.fancybox-overlay.fancybox-overlay-fixed > div > div > div.fancybox-title.fancybox-title-float-wrap > span').text("Next Video in: "+counter)
+        }
+        // Display 'counter' wherever you want to display it.
+        if (counter === 0) {
+            if (isActive)
+            {
+                $.fancybox.next();
+                clearInterval(counter);    
+            }
+            
+        }
+        
+      }, 1000);
     }
+    
 }
 $.urlParam = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
